@@ -3,6 +3,17 @@
 All notable changes to this project.
 Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: [SemVer](https://semver.org/).
 
+## [1.2.2] - 2026-10-22
+
+### Fixed
+- Removed the branch fallback from update detection. The library tries the
+  latest release, then the latest tag, then whatever sits on `main`, so an
+  untagged version bump would have been served as an update.
+
+### Added
+- `php -l` runs over every PHP file before the release zip is built, so a
+  syntax error fails the release instead of reaching a live site.
+
 ## [1.2.1] - 2026-10-22
 
 ### Changed

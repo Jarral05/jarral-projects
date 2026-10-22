@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Jarral Projects
  * Description:       Registers the Projects post type and Service Type taxonomy used by the portfolio grid.
- * Version:     1.2.1
+ * Version:     1.2.2
  * Requires at least: 6.4
  * Requires PHP:      8.0
  * Update URI:        https://github.com/Jarral05/jarral-projects
@@ -206,10 +206,23 @@ function jdp_updates() {
 		'jarral-projects'
 	);
 
-	// Only offer tagged releases, never whatever is sitting on the branch.
-	// Without this you would push half-finished work to live client sites.
-	if ( method_exists( $checker->getVcsApi(), 'enableReleaseAssets' ) ) {
-		$checker->getVcsApi()->enableReleaseAssets();
+	// Use the zip attached to a GitHub release rather than the auto-generated
+	// source zip (falling back to the source zip if a release has none). This
+	// only changes which file is downloaded, not which version is offered.
+	$api = $checker->getVcsApi();
+	if ( $api && method_exists( $api, 'enableReleaseAssets' ) ) {
+		$api->enableReleaseAssets();
 	}
+
+	// The library tries the latest release, then the latest tag, then falls
+	// back to the branch. Dropping the branch step means only releases and
+	// tags are ever offered, so untagged work never reaches client sites.
+	add_filter(
+		'puc_vcs_update_detection_strategies-jarral-projects',
+		static function ( $strategies ) {
+			unset( $strategies['branch'] );
+			return $strategies;
+		}
+	);
 }
 add_action( 'init', 'jdp_updates' );
