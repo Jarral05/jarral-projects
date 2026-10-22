@@ -3,6 +3,13 @@
 All notable changes to this project.
 Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: [SemVer](https://semver.org/).
 
+## [1.2.3] - 2026-10-22
+
+### Fixed
+- The 1.2.2 release carried a stale `Version:` header, so the update checker
+  read 1.2.1 from the file and offered nothing. The header takes precedence
+  over the tag — `Vcs/PluginUpdateChecker.php` line 79.
+
 ## [1.2.2] - 2026-10-22
 
 ### Fixed

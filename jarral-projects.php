@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Jarral Projects
  * Description:       Registers the Projects post type and Service Type taxonomy used by the portfolio grid.
- * Version:     1.2.2
+ * Version:     1.2.3
  * Requires at least: 6.4
  * Requires PHP:      8.0
  * Update URI:        https://github.com/Jarral05/jarral-projects
