@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Jarral Projects
  * Description:       Registers the Projects post type and Service Type taxonomy used by the portfolio grid.
- * Version:     1.2.4
+ * Version:     1.2.5
  * Requires at least: 6.4
  * Requires PHP:      8.0
  * Update URI:        https://github.com/Jarral05/jarral-projects
@@ -65,7 +65,8 @@ function jdp_register_post_type() {
 add_action( 'init', 'jdp_register_post_type' );
 
 /**
- * Two extra fields per project: the client's industry and the live URL.
+ * Extra fields per project: the client's industry, the live URL, the year
+ * it was delivered and what it was built with.
  */
 function jdp_meta_box() {
 	add_meta_box(
@@ -90,8 +91,10 @@ function jdp_meta_box_html( $post ) {
 	// site. Without it, anyone could trick a logged-in admin into saving data.
 	wp_nonce_field( 'jdp_save_meta', 'jdp_nonce' );
 
-	$type = get_post_meta( $post->ID, '_jd_client_type', true );
-	$url  = get_post_meta( $post->ID, '_jd_live_url', true );
+	$type  = get_post_meta( $post->ID, '_jd_client_type', true );
+	$url   = get_post_meta( $post->ID, '_jd_live_url', true );
+	$year  = get_post_meta( $post->ID, '_jd_year', true );
+	$stack = get_post_meta( $post->ID, '_jd_stack', true );
 	?>
 	<p>
 		<label for="jd_client_type"><strong><?php esc_html_e( 'Client industry', 'jarral-projects' ); ?></strong></label><br>
@@ -102,6 +105,16 @@ function jdp_meta_box_html( $post ) {
 		<label for="jd_live_url"><strong><?php esc_html_e( 'Live URL', 'jarral-projects' ); ?></strong></label><br>
 		<input type="url" id="jd_live_url" name="jd_live_url" class="widefat"
 		       value="<?php echo esc_url( $url ); ?>" placeholder="https://example.com">
+	</p>
+	<p>
+		<label for="jd_year"><strong><?php esc_html_e( 'Year', 'jarral-projects' ); ?></strong></label><br>
+		<input type="text" id="jd_year" name="jd_year" class="widefat"
+		       value="<?php echo esc_attr( $year ); ?>" placeholder="2025">
+	</p>
+	<p>
+		<label for="jd_stack"><strong><?php esc_html_e( 'Built with', 'jarral-projects' ); ?></strong></label><br>
+		<input type="text" id="jd_stack" name="jd_stack" class="widefat"
+		       value="<?php echo esc_attr( $stack ); ?>" placeholder="WordPress, Gravity Forms, Stripe">
 	</p>
 	<?php
 }
@@ -146,6 +159,22 @@ function jdp_save_meta( $post_id ) {
 			$post_id,
 			'_jd_live_url',
 			esc_url_raw( wp_unslash( $_POST['jd_live_url'] ) )
+		);
+	}
+
+	if ( isset( $_POST['jd_year'] ) ) {
+		update_post_meta(
+			$post_id,
+			'_jd_year',
+			sanitize_text_field( wp_unslash( $_POST['jd_year'] ) )
+		);
+	}
+
+	if ( isset( $_POST['jd_stack'] ) ) {
+		update_post_meta(
+			$post_id,
+			'_jd_stack',
+			sanitize_text_field( wp_unslash( $_POST['jd_stack'] ) )
 		);
 	}
 }

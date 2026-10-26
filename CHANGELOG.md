@@ -3,6 +3,21 @@
 All notable changes to this project.
 Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: [SemVer](https://semver.org/).
 
+## [1.2.5] - 2026-10-27
+
+### Added
+- **Year and Built with fields** in the Project details box, saved as
+  `_jd_year` and `_jd_stack`. They use the same nonce, capability check and
+  `sanitize_text_field` as the existing Client industry and Live URL fields.
+  Jarral Digital 1.8.7 shows them on the case study page; an empty field
+  shows nothing.
+- Tested on the QA install: 11 checks covering save, markup stripping,
+  missing nonce, a user without edit rights, display, and empty fields.
+
+### Changed
+- The release workflow no longer generates release notes, matching the theme
+  and Jarral Forms. `CHANGELOG.md` is the record.
+
 ## [1.2.4] - 2026-10-23
 
 ### Fixed
